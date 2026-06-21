@@ -913,8 +913,8 @@ export default function App() {
               {/* ── MONETIZATION BLOCK ──────────────────────────────────────── */}
 
               {/* 1. EthicalAds / Carbon Ads Banner */}
-              <div className={`mt-10 rounded-xl border overflow-hidden ${isDarkMode ? "border-white/10 bg-white/[0.03]" : "border-slate-200 bg-white shadow-xs"}`} id="ethical-ads-banner">
-                <div className={`px-4 py-1.5 border-b flex items-center justify-between ${isDarkMode ? "border-white/5 bg-white/[0.02]" : "border-slate-100 bg-slate-50"}`}>
+              <div className={`mt-10 rounded-xl border overflow-hidden ${isDarkMode ? "border-white/10 bg-white/[0.03]" : "border-indigo-200 bg-indigo-50 shadow-sm"}`} id="ethical-ads-banner">
+                <div className={`px-4 py-1.5 border-b flex items-center justify-between ${isDarkMode ? "border-white/5 bg-white/[0.02]" : "border-indigo-200 bg-indigo-100"}`}>
                   <span className={`text-[8px] font-mono uppercase tracking-widest ${isDarkMode ? "text-white/25" : "text-slate-400"}`}>ETHICAL ADS · Privacy-respecting sponsor</span>
                   <a href="https://ethicalads.io" target="_blank" rel="noopener noreferrer" className="text-[8px] font-mono text-cyan-500 hover:text-cyan-300 uppercase tracking-wide transition">ethicalads.io</a>
                 </div>
@@ -938,7 +938,7 @@ export default function App() {
               </div>
 
               {/* 2. Buy Me a Coffee / Ko-fi Support Widget */}
-              <div className={`mt-6 rounded-xl border p-6 flex flex-col sm:flex-row items-center gap-6 ${isDarkMode ? "border-yellow-500/20 bg-yellow-500/[0.04]" : "border-yellow-200 bg-yellow-50"}`} id="support-coffee-widget">
+              <div className={`mt-6 rounded-xl border p-6 flex flex-col sm:flex-row items-center gap-6 ${isDarkMode ? "border-yellow-500/20 bg-yellow-500/[0.04]" : "border-yellow-300 bg-yellow-100 shadow-sm"}`} id="support-coffee-widget">
                 <div className="flex-shrink-0 text-5xl select-none">☕</div>
                 <div className="flex-1 space-y-1 text-center sm:text-left">
                   <h4 className={`font-black text-base uppercase tracking-wide ${isDarkMode ? "text-yellow-300" : "text-yellow-800"}`}>ByteBridge is free & open — help keep it that way</h4>
@@ -970,7 +970,7 @@ export default function App() {
               <div className="mt-6 space-y-3" id="affiliate-resources">
                 <div className="flex items-center justify-between">
                   <span className={`text-[10px] font-mono uppercase tracking-widest font-bold ${isDarkMode ? "text-white/30" : "text-slate-400"}`}>Recommended Developer Resources · Affiliate</span>
-                  <span className={`text-[8px] font-mono ${isDarkMode ? "text-white/20" : "text-slate-300"}`}>We may earn a commission at no cost to you</span>
+                  <span className={`text-[8px] font-mono ${isDarkMode ? "text-white/20" : "text-slate-400"}`}>We may earn a commission at no cost to you</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {[
@@ -1004,7 +1004,7 @@ export default function App() {
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer sponsored"
-                      className={`group flex gap-3 items-start p-4 rounded-xl border transition-all ${isDarkMode ? "bg-white/[0.03] border-white/10 hover:border-cyan-500/30 hover:bg-white/[0.06]" : "bg-white border-slate-200 hover:border-cyan-400 shadow-xs"}`}
+                      className={`group flex gap-3 items-start p-4 rounded-xl border transition-all ${isDarkMode ? "bg-white/[0.03] border-white/10 hover:border-cyan-500/30 hover:bg-white/[0.06]" : "bg-white border-slate-300 hover:border-cyan-500 shadow-sm"}`}
                     >
                       <span className="text-2xl flex-shrink-0">{item.icon}</span>
                       <div className="min-w-0">
