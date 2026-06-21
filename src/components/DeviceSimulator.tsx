@@ -19,6 +19,7 @@ interface DeviceSimulatorProps {
   isSender: boolean;
   restrictions: string;
   onRestrictionsChange: (val: string) => void;
+  isDarkMode: boolean;
 }
 
 export const deviceTypeIcons: Record<DeviceType, React.ComponentType<any>> = {
@@ -39,6 +40,7 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
   isSender,
   restrictions,
   onRestrictionsChange,
+  isDarkMode,
 }) => {
   const IconComponent = deviceTypeIcons[device.type] || Laptop;
 
@@ -73,21 +75,29 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
   ];
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden flex flex-col h-full font-mono text-xs text-slate-300" id={`device-sim-${device.id}`}>
+    <div className={`rounded-xl overflow-hidden flex flex-col h-full font-mono text-xs ${
+      isDarkMode 
+        ? "bg-white/5 border border-white/10 text-slate-300" 
+        : "bg-white border border-slate-200 text-slate-700 shadow-xs"
+    }`} id={`device-sim-${device.id}`}>
       {/* Header */}
-      <div className="bg-black/45 border-b border-white/5 px-4 py-2.5 flex items-center justify-between">
+      <div className={`border-b px-4 py-2.5 flex items-center justify-between ${
+        isDarkMode ? "bg-black/45 border-white/5" : "bg-slate-50 border-slate-200"
+      }`}>
         <div className="flex items-center gap-2">
           <div className={`p-1.5 rounded-sm ${isSender ? "bg-cyan-500/10 text-cyan-400" : "bg-emerald-500/10 text-emerald-400"}`}>
             <IconComponent className="w-3.5 h-3.5" />
           </div>
-          <span className="font-extrabold uppercase tracking-wider text-[11px] text-slate-200">{title}</span>
+          <span className={`font-extrabold uppercase tracking-wider text-[11px] ${
+            isDarkMode ? "text-slate-200" : "text-slate-900"
+          }`}>{title}</span>
         </div>
         <div className="flex items-center gap-1.5 text-[10px]">
           <span className="flex h-1.5 w-1.5 relative">
             <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${device.isOnline ? "bg-emerald-400" : "bg-rose-400"}`}></span>
             <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${device.isOnline ? "bg-emerald-500" : "bg-rose-500"}`}></span>
           </span>
-          <span className="text-white/40">{device.isOnline ? "SYNCED" : "OFFLINE"}</span>
+          <span className={isDarkMode ? "text-white/40" : "text-slate-500"}>{device.isOnline ? "SYNCED" : "OFFLINE"}</span>
         </div>
       </div>
 
@@ -96,20 +106,28 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
         {/* Profile Details */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-[9px] uppercase text-white/40 mb-1">Device Name</label>
+            <label className={`block text-[9px] uppercase mb-1 ${isDarkMode ? "text-white/40" : "text-slate-500"}`}>Device Name</label>
             <input
               type="text"
               value={device.name}
               onChange={(e) => onChange({ ...device, name: e.target.value })}
-              className="w-full text-xs font-mono bg-black/40 border border-white/10 rounded-lg px-2.5 py-1.5 text-slate-100 focus:outline-cyan-500 focus:bg-black transition-all"
+              className={`w-full text-xs font-mono border rounded-lg px-2.5 py-1.5 focus:outline-cyan-500 transition-all ${
+                isDarkMode 
+                  ? "bg-black/40 border-white/10 text-slate-100 focus:bg-black focus:border-white/20" 
+                  : "bg-white border-slate-350 text-slate-900 focus:bg-white focus:border-cyan-500 shadow-inner"
+              }`}
             />
           </div>
           <div>
-            <label className="block text-[9px] uppercase text-white/40 mb-1">Platform OS</label>
+            <label className={`block text-[9px] uppercase mb-1 ${isDarkMode ? "text-white/40" : "text-slate-500"}`}>Platform OS</label>
             <select
               value={device.type}
               onChange={(e) => handleOSChange(e.target.value as DeviceType)}
-              className="w-full text-xs font-mono bg-black/40 border border-white/10 rounded-lg px-2.5 py-1.5 text-slate-100 focus:outline-cyan-500 focus:bg-black transition-all"
+              className={`w-full text-xs font-mono border rounded-lg px-2.5 py-1.5 focus:outline-cyan-500 transition-all cursor-pointer ${
+                isDarkMode 
+                  ? "bg-black/40 border-white/10 text-slate-100 focus:bg-black focus:border-white/20" 
+                  : "bg-white border-slate-350 text-slate-900 focus:bg-white focus:border-cyan-500 shadow-inner"
+              }`}
             >
               <option value="Windows PC">Windows PC</option>
               <option value="MacBook">MacBook</option>
@@ -127,11 +145,11 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
         <div className="space-y-3">
           {/* Battery level */}
           <div>
-            <div className="flex justify-between items-center text-[10px] text-white/50 mb-1">
+            <div className={`flex justify-between items-center text-[10px] mb-1 ${isDarkMode ? "text-white/50" : "text-slate-500"}`}>
               <span className="flex items-center gap-1">
-                <Battery className="w-3.5 h-3.5 text-white/30" /> Battery Level
+                <Battery className={`w-3.5 h-3.5 ${isDarkMode ? "text-white/30" : "text-slate-400"}`} /> Battery Level
               </span>
-              <span className="text-emerald-400 font-bold">{device.batteryLevel}%</span>
+              <span className="text-emerald-500 font-bold">{device.batteryLevel}%</span>
             </div>
             <input
               type="range"
@@ -139,19 +157,25 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
               max="100"
               value={device.batteryLevel}
               onChange={(e) => onChange({ ...device, batteryLevel: Number(e.target.value) })}
-              className="w-full h-1 bg-black/60 rounded-lg appearance-none cursor-pointer accent-cyan-500 focus:outline-none"
+              className={`w-full h-1 rounded-lg appearance-none cursor-pointer accent-cyan-500 focus:outline-none ${
+                isDarkMode ? "bg-black/60" : "bg-slate-200"
+              }`}
             />
           </div>
 
           {/* Network presets */}
           <div>
-            <label className="flex items-center gap-1 block text-[9px] uppercase text-white/40 mb-1">
-              <Wifi className="w-3.5 h-3.5 text-white/30" /> Transmission Channel
+            <label className={`flex items-center gap-1 block text-[9px] uppercase mb-1 ${isDarkMode ? "text-white/40" : "text-slate-500"}`}>
+              <Wifi className={`w-3.5 h-3.5 ${isDarkMode ? "text-white/30" : "text-slate-400"}`} /> Transmission Channel
             </label>
             <select
               value={device.networkQuality}
               onChange={(e) => onChange({ ...device, networkQuality: e.target.value })}
-              className="w-full text-xs font-mono bg-black/40 border border-white/10 rounded-lg px-2.5 py-1.5 text-slate-100 focus:outline-cyan-500 focus:bg-black transition-all"
+              className={`w-full text-xs font-mono border rounded-lg px-2.5 py-1.5 focus:outline-cyan-500 transition-all cursor-pointer ${
+                isDarkMode 
+                  ? "bg-black/40 border-white/10 text-slate-100 focus:bg-black focus:border-white/20" 
+                  : "bg-white border-slate-350 text-slate-900 focus:bg-white focus:border-cyan-500 shadow-inner"
+              }`}
             >
               {networkOptions.map((opt) => (
                 <option key={opt} value={opt}>
@@ -163,8 +187,8 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
 
           {/* Corporate Network Restrictions */}
           {isSender && (
-            <div className="pt-3 border-t border-white/5 space-y-2">
-              <label className="flex items-center gap-1 block text-[9px] uppercase text-rose-400 font-bold">
+            <div className={`pt-3 border-t space-y-2 ${isDarkMode ? "border-white/5" : "border-slate-200"}`}>
+              <label className="flex items-center gap-1 block text-[9px] uppercase text-rose-500 font-bold">
                 <ShieldAlert className="w-3.5 h-3.5" /> Firewall Blockade Presets
               </label>
 
@@ -175,7 +199,11 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
                     onRestrictionsChange(e.target.value);
                   }
                 }}
-                className="w-full text-xs font-mono bg-black/40 border border-white/10 rounded-lg px-2.5 py-1.5 text-slate-100 focus:outline-cyan-500 focus:bg-black transition-all"
+                className={`w-full text-xs font-mono border rounded-lg px-2.5 py-1.5 focus:outline-cyan-500 transition-all cursor-pointer ${
+                  isDarkMode 
+                    ? "bg-black/40 border-white/10 text-slate-100 focus:bg-black focus:border-white/20" 
+                    : "bg-white border-slate-350 text-slate-900 focus:bg-white focus:border-cyan-500 shadow-inner"
+                }`}
               >
                 {restrictionsPresets.map((p) => (
                   <option key={p.label} value={p.value}>
@@ -190,7 +218,11 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
                 onChange={(e) => onRestrictionsChange(e.target.value)}
                 placeholder="Type custom local isolated ports parameters..."
                 rows={2}
-                className="w-full text-xs font-mono bg-black/40 border border-white/10 rounded-lg px-2.5 py-2 text-slate-100 focus:outline-cyan-500 focus:bg-black transition-all leading-relaxed"
+                className={`w-full text-xs font-mono border rounded-lg px-2.5 py-2 focus:outline-cyan-500 transition-all leading-relaxed ${
+                  isDarkMode 
+                    ? "bg-black/40 border-white/10 text-slate-100 focus:bg-black focus:border-white/20" 
+                    : "bg-white border-slate-350 text-slate-800 focus:bg-white focus:border-cyan-500 shadow-inner"
+                }`}
               />
             </div>
           )}
@@ -198,10 +230,16 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
       </div>
 
       {/* Footer Info */}
-      <div className="bg-black/30 border-t border-white/5 px-4 py-2 flex items-center justify-between text-[9px] text-white/30">
+      <div className={`border-t px-4 py-2 flex items-center justify-between text-[9px] ${
+        isDarkMode 
+          ? "bg-black/30 border-white/5 text-white/30" 
+          : "bg-slate-50 border-slate-200 text-slate-450"
+      }`}>
         <span>PEER MAC: {device.id}</span>
-        <span className="flex items-center gap-1 uppercase hover:text-white transition">
-          <CheckCircle className="w-3 h-3 text-emerald-400" /> Secure Handshake
+        <span className={`flex items-center gap-1 uppercase transition ${
+          isDarkMode ? "text-white/30 hover:text-white" : "text-slate-450 hover:text-slate-900"
+        }`}>
+          <CheckCircle className="w-3 h-3 text-emerald-500" /> Secure Handshake
         </span>
       </div>
     </div>

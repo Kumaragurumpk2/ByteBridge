@@ -151,6 +151,7 @@ export default function App() {
   const [activeMethodIndex, setActiveMethodIndex] = useState<number>(4); // Method 5 active initially
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [feedbackSuccess, setFeedbackSuccess] = useState<boolean>(false);
+  const [contactSuccess, setContactSuccess] = useState<boolean>(false);
 
   // Automatic backstages phases state tracking
   const [autosystemStage, setAutosystemStage] = useState<"idle" | "packing" | "compressing" | "encrypting" | "pushing" | "completed">("idle");
@@ -348,7 +349,7 @@ export default function App() {
     setTransferProgress(35);
 
     // Core transmission loop registration
-    const chunksCount = activeProfile ? parseInt(activeProfile.chunkSize) || 12 : 8;
+    const chunksCount = 20; // Fixed chunk count for transfer simulation (chunkSize is a size like "512 KB", not a count)
 
     try {
       await fetch(`/api/bridge/rooms/${roomCode}/files/init`, {
@@ -787,7 +788,7 @@ export default function App() {
                           <span className="text-cyan-400 font-black text-sm">01</span>
                           <div>
                             <span className={`font-bold uppercase block leading-none ${isDarkMode ? "text-slate-100" : "text-slate-950"}`}>Select File</span>
-                            <span className="text-[9px] text-white/40">Any type, zero zip errors</span>
+                            <span className={`text-[9px] ${isDarkMode ? "text-white/40" : "text-slate-400"}`}>Any type, zero zip errors</span>
                           </div>
                         </div>
                         <div className={`p-3 rounded-lg border flex items-center gap-3 ${
@@ -796,7 +797,7 @@ export default function App() {
                           <span className="text-cyan-400 font-black text-sm">02</span>
                           <div>
                             <span className={`font-bold uppercase block leading-none ${isDarkMode ? "text-slate-100" : "text-slate-950"}`}>Secure Code</span>
-                            <span className="text-[9px] text-white/40 font-mono">Linked to AES session</span>
+                            <span className={`text-[9px] ${isDarkMode ? "text-white/40" : "text-slate-400"} font-mono`}>Linked to AES session</span>
                           </div>
                         </div>
                         <div className={`p-3 rounded-lg border flex items-center gap-3 ${
@@ -805,7 +806,7 @@ export default function App() {
                           <span className="text-cyan-400 font-black text-sm">03</span>
                           <div>
                             <span className={`font-bold uppercase block leading-none ${isDarkMode ? "text-slate-100" : "text-slate-950"}`}>Receive Stream</span>
-                            <span className="text-[9px] text-white/40">Enter code on target node</span>
+                            <span className={`text-[9px] ${isDarkMode ? "text-white/40" : "text-slate-400"}`}>Enter code on target node</span>
                           </div>
                         </div>
                         <div className={`p-3 rounded-lg border flex items-center gap-3 ${
@@ -814,7 +815,7 @@ export default function App() {
                           <span className="text-cyan-400 font-black text-sm">04</span>
                           <div>
                             <span className={`font-bold uppercase block leading-none ${isDarkMode ? "text-slate-100" : "text-slate-950"}`}>Unpack & Save</span>
-                            <span className="text-[9px] text-white/40">Decoded block restored</span>
+                            <span className={`text-[9px] ${isDarkMode ? "text-white/40" : "text-slate-400"}`}>Decoded block restored</span>
                           </div>
                         </div>
                       </div>
@@ -851,7 +852,7 @@ export default function App() {
 
                         <div>
                           <h3 className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? "text-slate-200" : "text-slate-900"}`}>Zero-Knowledge Backplane</h3>
-                          <p className="text-[11px] text-white/50 leading-relaxed mt-1">
+                          <p className={`text-[11px] ${isDarkMode ? "text-white/50" : "text-slate-500"} leading-relaxed mt-1`}>
                             Compresses selections through gzip streams, envelopes blocks inside symmetric AES-256 client-side cryptography salts, and coordinates metadata keys. No files are stored unencrypted on any server.
                           </p>
                         </div>
@@ -877,7 +878,7 @@ export default function App() {
                     </div>
 
                     {/* Quick compatibility strip */}
-                    <div className="bg-slate-950/40 p-4 border border-white/5 rounded-xl font-mono text-[9px] text-white/40 leading-relaxed">
+                    <div className={`bg-slate-950/40 p-4 border border-white/5 rounded-xl font-mono text-[9px] ${isDarkMode ? "text-white/40" : "text-slate-400"} leading-relaxed`}>
                       <span className="block text-cyan-400 font-extrabold uppercase mb-1">Supported File Extensions & Formats:</span>
                       ZIP, RAR, TAR.GZ, PDF, DOCX, XLSX, PPTX, DMG, EXE, ISO, PNG, JPG, MP4, Source Code, and any other raw binary file stream.
                     </div>
@@ -901,13 +902,123 @@ export default function App() {
                       { label: "Success Rate", value: "99.8%", detail: "Zero bit errors", color: "text-amber-400" },
                     ].map((metric) => (
                       <div key={metric.label} className="bg-white/5 border border-white/5 p-3.5 rounded-lg space-y-1">
-                        <span className="text-[10px] text-white/40 block leading-none uppercase">{metric.label}</span>
+                        <span className={`text-[10px] ${isDarkMode ? "text-white/40" : "text-slate-400"} block leading-none uppercase`}>{metric.label}</span>
                         <span className={`text-base font-black block ${metric.color}`}>{metric.value}</span>
                         <span className="text-[9px] text-white/30 block font-mono">{metric.detail}</span>
                       </div>
                     ))}
                   </div>
                 </div>
+
+              {/* ── MONETIZATION BLOCK ──────────────────────────────────────── */}
+
+              {/* 1. EthicalAds / Carbon Ads Banner */}
+              <div className={`mt-10 rounded-xl border overflow-hidden ${isDarkMode ? "border-white/10 bg-white/[0.03]" : "border-slate-200 bg-white shadow-xs"}`} id="ethical-ads-banner">
+                <div className={`px-4 py-1.5 border-b flex items-center justify-between ${isDarkMode ? "border-white/5 bg-white/[0.02]" : "border-slate-100 bg-slate-50"}`}>
+                  <span className={`text-[8px] font-mono uppercase tracking-widest ${isDarkMode ? "text-white/25" : "text-slate-400"}`}>ETHICAL ADS · Privacy-respecting sponsor</span>
+                  <a href="https://ethicalads.io" target="_blank" rel="noopener noreferrer" className="text-[8px] font-mono text-cyan-500 hover:text-cyan-300 uppercase tracking-wide transition">ethicalads.io</a>
+                </div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 p-5">
+                  <div className={`w-14 h-14 rounded-lg flex-shrink-0 flex items-center justify-center font-black text-2xl ${isDarkMode ? "bg-indigo-500/20 text-indigo-400" : "bg-indigo-100 text-indigo-600"}`}>
+                    ☁
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <p className={`text-sm font-bold ${isDarkMode ? "text-slate-100" : "text-slate-900"}`}>DigitalOcean — Deploy apps in 60 seconds</p>
+                    <p className={`text-xs ${isDarkMode ? "text-white/50" : "text-slate-500"}`}>The developer cloud. Spin up VMs, managed Kubernetes, and object storage without enterprise lock-in. $200 in credits free.</p>
+                  </div>
+                  <a
+                    href="https://www.digitalocean.com/?refcode=bytebridge"
+                    target="_blank"
+                    rel="noopener noreferrer sponsored"
+                    className="flex-shrink-0 px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-bold text-xs uppercase tracking-wider rounded transition"
+                  >
+                    Try Free →
+                  </a>
+                </div>
+              </div>
+
+              {/* 2. Buy Me a Coffee / Ko-fi Support Widget */}
+              <div className={`mt-6 rounded-xl border p-6 flex flex-col sm:flex-row items-center gap-6 ${isDarkMode ? "border-yellow-500/20 bg-yellow-500/[0.04]" : "border-yellow-200 bg-yellow-50"}`} id="support-coffee-widget">
+                <div className="flex-shrink-0 text-5xl select-none">☕</div>
+                <div className="flex-1 space-y-1 text-center sm:text-left">
+                  <h4 className={`font-black text-base uppercase tracking-wide ${isDarkMode ? "text-yellow-300" : "text-yellow-800"}`}>ByteBridge is free & open — help keep it that way</h4>
+                  <p className={`text-xs leading-relaxed ${isDarkMode ? "text-white/50" : "text-yellow-700/70"}`}>
+                    No paywalls, no tracking, no nonsense. If ByteBridge saved you from a dead USB port or a blocked email, consider buying the dev a coffee.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2 flex-shrink-0">
+                  <a
+                    href="https://www.buymeacoffee.com/kumragurumpk2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-black font-black text-xs uppercase tracking-widest rounded-lg transition shadow-md shadow-yellow-400/20 whitespace-nowrap"
+                  >
+                    ☕ Buy Me a Coffee
+                  </a>
+                  <a
+                    href="https://ko-fi.com/kumragurumpk2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`px-5 py-2.5 font-black text-xs uppercase tracking-widest rounded-lg transition whitespace-nowrap text-center ${isDarkMode ? "bg-white/10 hover:bg-white/20 text-white" : "bg-white hover:bg-slate-100 text-slate-800 border border-slate-200"}`}
+                  >
+                    ♡ Support on Ko-fi
+                  </a>
+                </div>
+              </div>
+
+              {/* 3. Affiliate / Recommended Developer Tools */}
+              <div className="mt-6 space-y-3" id="affiliate-resources">
+                <div className="flex items-center justify-between">
+                  <span className={`text-[10px] font-mono uppercase tracking-widest font-bold ${isDarkMode ? "text-white/30" : "text-slate-400"}`}>Recommended Developer Resources · Affiliate</span>
+                  <span className={`text-[8px] font-mono ${isDarkMode ? "text-white/20" : "text-slate-300"}`}>We may earn a commission at no cost to you</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {[
+                    {
+                      icon: "🌊",
+                      name: "DigitalOcean",
+                      desc: "Cloud VPS & managed DBs. $200 free credits for new users.",
+                      tag: "Cloud Hosting",
+                      tagColor: isDarkMode ? "text-blue-400 bg-blue-500/10" : "text-blue-700 bg-blue-100",
+                      href: "https://www.digitalocean.com/?refcode=bytebridge",
+                    },
+                    {
+                      icon: "🔑",
+                      name: "Namecheap Domains",
+                      desc: "Cheap .com domains & SSL certs. Perfect for your next project.",
+                      tag: "Domains & SSL",
+                      tagColor: isDarkMode ? "text-orange-400 bg-orange-500/10" : "text-orange-700 bg-orange-100",
+                      href: "https://www.namecheap.com/?aff=bytebridge",
+                    },
+                    {
+                      icon: "🎓",
+                      name: "Frontend Masters",
+                      desc: "Expert-led courses on JS, TypeScript, React, Node, and more.",
+                      tag: "Dev Courses",
+                      tagColor: isDarkMode ? "text-rose-400 bg-rose-500/10" : "text-rose-700 bg-rose-100",
+                      href: "https://frontendmasters.com/?ref=bytebridge",
+                    },
+                  ].map((item) => (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer sponsored"
+                      className={`group flex gap-3 items-start p-4 rounded-xl border transition-all ${isDarkMode ? "bg-white/[0.03] border-white/10 hover:border-cyan-500/30 hover:bg-white/[0.06]" : "bg-white border-slate-200 hover:border-cyan-400 shadow-xs"}`}
+                    >
+                      <span className="text-2xl flex-shrink-0">{item.icon}</span>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                          <span className={`text-xs font-bold ${isDarkMode ? "text-slate-100 group-hover:text-cyan-300" : "text-slate-900 group-hover:text-cyan-700"} transition`}>{item.name}</span>
+                          <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded uppercase ${item.tagColor}`}>{item.tag}</span>
+                        </div>
+                        <p className={`text-[10px] leading-relaxed ${isDarkMode ? "text-white/40" : "text-slate-500"}`}>{item.desc}</p>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+              {/* ── END MONETIZATION BLOCK ──────────────────────────────────── */}
               </div>
             )}
 
@@ -916,11 +1027,11 @@ export default function App() {
               <div className="space-y-6">
                 <div>
                   <h3 className="text-xl font-bold uppercase text-cyan-400 font-mono">ByteBridge Core Technical Features</h3>
-                  <p className="text-xs text-white/50">Engineered to bypass physical blocks, isolated subnets, and strict secure firewalls.</p>
+                  <p className={`text-xs ${isDarkMode ? "text-white/50" : "text-slate-500"}`}>Engineered to bypass physical blocks, isolated subnets, and strict secure firewalls.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-xs">
-                  <div className="bg-white/5 border border-white/10 p-5 rounded-xl space-y-2">
+                  <div className={`p-5 rounded-xl space-y-2 ${isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-205 shadow-xs"}`}>
                     <div className="p-2 bg-cyan-500/10 text-cyan-400 w-fit rounded mb-2">
                       <LockIcon className="w-5 h-5" />
                     </div>
@@ -930,7 +1041,7 @@ export default function App() {
                     </p>
                   </div>
 
-                  <div className="bg-white/5 border border-white/10 p-5 rounded-xl space-y-2">
+                  <div className={`p-5 rounded-xl space-y-2 ${isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-205 shadow-xs"}`}>
                     <div className="p-2 bg-cyan-500/10 text-cyan-400 w-fit rounded mb-2">
                       <Layers className="w-5 h-5" />
                     </div>
@@ -940,7 +1051,7 @@ export default function App() {
                     </p>
                   </div>
 
-                  <div className="bg-white/5 border border-white/10 p-5 rounded-xl space-y-2">
+                  <div className={`p-5 rounded-xl space-y-2 ${isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-205 shadow-xs"}`}>
                     <div className="p-2 bg-cyan-500/10 text-cyan-400 w-fit rounded mb-2">
                       <Zap className="w-5 h-5" />
                     </div>
@@ -950,7 +1061,7 @@ export default function App() {
                     </p>
                   </div>
 
-                  <div className="bg-white/5 border border-white/10 p-5 rounded-xl space-y-2">
+                  <div className={`p-5 rounded-xl space-y-2 ${isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-205 shadow-xs"}`}>
                     <div className="p-2 bg-cyan-500/10 text-cyan-400 w-fit rounded mb-2">
                       <QrCode className="w-5 h-5" />
                     </div>
@@ -960,7 +1071,7 @@ export default function App() {
                     </p>
                   </div>
 
-                  <div className="bg-white/5 border border-white/10 p-5 rounded-xl space-y-2">
+                  <div className={`p-5 rounded-xl space-y-2 ${isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-205 shadow-xs"}`}>
                     <div className="p-2 bg-cyan-500/10 text-cyan-400 w-fit rounded mb-2">
                       <Copy className="w-5 h-5" />
                     </div>
@@ -970,7 +1081,7 @@ export default function App() {
                     </p>
                   </div>
 
-                  <div className="bg-white/5 border border-white/10 p-5 rounded-xl space-y-2">
+                  <div className={`p-5 rounded-xl space-y-2 ${isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-205 shadow-xs"}`}>
                     <div className="p-2 bg-cyan-500/10 text-cyan-400 w-fit rounded mb-2">
                       <Network className="w-5 h-5" />
                     </div>
@@ -988,45 +1099,45 @@ export default function App() {
               <div className="space-y-6">
                 <div>
                   <h3 className="text-xl font-bold uppercase text-cyan-400 font-mono">Backstage Mechanics & Data Flows</h3>
-                  <p className="text-xs text-white/50">Behind the scenes of our Zero-Knowledge Pack and Unpack systems.</p>
+                  <p className={`text-xs ${isDarkMode ? "text-white/50" : "text-slate-500"}`}>Behind the scenes of our Zero-Knowledge Pack and Unpack systems.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 font-mono text-xs animate-fade-in">
                   <div className="bg-white/5 border border-white/5 p-4 rounded-lg space-y-2 relative">
                     <div className="text-cyan-400 font-bold text-sm block mb-1">Step 1: Packaging & Pack</div>
-                    <p className="text-[11px] text-white/50 leading-relaxed">
+                    <p className={`text-[11px] ${isDarkMode ? "text-white/50" : "text-slate-500"} leading-relaxed`}>
                       Files are fed into memory, automatically formatted into generic packet byte block arrays, resolving compression errors in browser.
                     </p>
                   </div>
                   <div className="bg-white/5 border border-white/5 p-4 rounded-lg space-y-2 relative">
                     <div className="text-cyan-400 font-bold text-sm block mb-1">Step 2: Client Encryption</div>
-                    <p className="text-[11px] text-white/50 leading-relaxed">
+                    <p className={`text-[11px] ${isDarkMode ? "text-white/50" : "text-slate-500"} leading-relaxed`}>
                       Symmetric AES-256 encryption seals the payload blocks. Keys are stored locally, giving you peace of mind.
                     </p>
                   </div>
                   <div className="bg-white/5 border border-white/5 p-4 rounded-lg space-y-2 relative">
                     <div className="text-cyan-400 font-bold text-sm block mb-1">Step 3: Multi-Path Syncing</div>
-                    <p className="text-[11px] text-white/50 leading-relaxed">
+                    <p className={`text-[11px] ${isDarkMode ? "text-white/50" : "text-slate-500"} leading-relaxed`}>
                       The generated code or QR pairing code facilitates WebRTC connection or HTTPS chunk relay according to local firewalls.
                     </p>
                   </div>
                   <div className="bg-white/5 border border-white/5 p-4 rounded-lg space-y-2 relative">
                     <div className="text-cyan-400 font-bold text-sm block mb-1">Step 4: Reassembly & Unpack</div>
-                    <p className="text-[11px] text-white/50 leading-relaxed">
+                    <p className={`text-[11px] ${isDarkMode ? "text-white/50" : "text-slate-500"} leading-relaxed`}>
                       Receiver browser pull segments, confirms CRC32 bit integrity, triggers AES decryption file restore, and downloads original filenames.
                     </p>
                   </div>
                 </div>
 
                 {/* Subnet telemetry flow visualization */}
-                <div className="bg-black/40 border border-white/10 p-5 rounded-xl font-mono text-center space-y-3">
+                <div className={`p-5 rounded-xl font-mono text-center space-y-3 border ${isDarkMode ? "bg-black/40 border-white/10 text-white/40" : "bg-slate-100 border-slate-250 text-slate-600"}`}>
                   <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-widest block">Stream Mapping Handshake Protocol</span>
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-[11px] text-white">
                     <div className="bg-cyan-500/10 px-4 py-2 rounded border border-cyan-500/20 w-44">SENDER NODE [AES-256]</div>
                     <div className="text-cyan-400 font-black animate-pulse">&larr;&larr;&larr; WebRTC Pair &rarr;&rarr;&rarr;</div>
                     <div className="bg-emerald-500/10 px-4 py-2 rounded border border-emerald-500/20 w-44">RECEIVER NODE [DECRYPT]</div>
                   </div>
-                  <p className="text-[10px] text-white/40 max-w-2xl mx-auto mt-2">
+                  <p className={`text-[10px] ${isDarkMode ? "text-white/40" : "text-slate-400"} max-w-2xl mx-auto mt-2`}>
                     Dynamic transport proxies coordinates hole punch routing natively. In restricted bank vaults or firewall zones, standard WebSockets coordinate intermediate segments automatically.
                   </p>
                 </div>
@@ -1038,7 +1149,7 @@ export default function App() {
               <div className="space-y-6">
                 <div className="text-center space-y-2 max-w-lg mx-auto">
                   <h3 className="text-xl font-black uppercase text-cyan-400 font-mono">Transparent, Humble Pricing</h3>
-                  <p className="text-xs text-white/50 leading-relaxed font-mono">
+                  <p className={`text-xs ${isDarkMode ? "text-white/50" : "text-slate-500"} leading-relaxed font-mono`}>
                     All core browser-to-browser WebRTC file transfers are free and unlimited. Select premium subscription if you require permanent cloud key archives.
                   </p>
                 </div>
@@ -1047,9 +1158,9 @@ export default function App() {
                   {/* Basic */}
                   <div className="bg-white/5 border border-white/5 p-6 rounded-xl flex flex-col justify-between space-y-5">
                     <div className="space-y-2">
-                      <span className="text-white/40 text-[9px] uppercase tracking-wider font-extrabold block">Community Free</span>
+                      <span className={`${isDarkMode ? "text-white/40" : "text-slate-400"} text-[9px] uppercase tracking-wider font-extrabold block`}>Community Free</span>
                       <h4 className={`text-xl font-black ${isDarkMode ? "text-slate-100" : "text-slate-900"}`}>0.00 USD</h4>
-                      <p className="text-white/50 text-[11px] leading-relaxed">Perfect for instant local transfers, quick QR pairing, and clipboard sharing across laptops.</p>
+                      <p className={`${isDarkMode ? "text-white/50" : "text-slate-500"} text-[11px] leading-relaxed`}>Perfect for instant local transfers, quick QR pairing, and clipboard sharing across laptops.</p>
                     </div>
                     <ul className="space-y-1 text-white/60 text-[10px] list-disc list-inside">
                       <li>Unlimited size (WebRTC direct)</li>
@@ -1065,7 +1176,7 @@ export default function App() {
                     <span className="absolute -top-2.5 right-4 bg-cyan-500 text-black font-black text-[8px] uppercase tracking-widest px-2 py-0.5 rounded-full">POPULAR</span>
                     <div className="space-y-2">
                       <span className="text-cyan-400 text-[9px] uppercase tracking-wider font-extrabold block">ByteBridge Professional</span>
-                      <h4 className="text-xl font-black text-cyan-400">9.00 USD <span className="text-[10px] text-white/40 font-normal">/ month</span></h4>
+                      <h4 className="text-xl font-black text-cyan-400">9.00 USD <span className={`text-[10px] ${isDarkMode ? "text-white/40" : "text-slate-400"} font-normal`}>/ month</span></h4>
                       <p className="text-white/70 text-[11px] leading-relaxed">For corporate experts, auditing departments, and system workers traversing hostile proxies.</p>
                     </div>
                     <ul className="space-y-1 text-slate-300 text-[10px] list-disc list-inside">
@@ -1080,9 +1191,9 @@ export default function App() {
                   {/* Enterprise */}
                   <div className="bg-white/5 border border-white/5 p-6 rounded-xl flex flex-col justify-between space-y-5">
                     <div className="space-y-2">
-                      <span className="text-white/40 text-[9px] uppercase tracking-wider font-extrabold block">Enterprise Sandbox</span>
+                      <span className={`${isDarkMode ? "text-white/40" : "text-slate-400"} text-[9px] uppercase tracking-wider font-extrabold block`}>Enterprise Sandbox</span>
                       <h4 className={`text-xl font-black ${isDarkMode ? "text-slate-100" : "text-slate-900"}`}>Custom SaaS</h4>
-                      <p className="text-white/50 text-[11px] leading-relaxed">Complete offline VM installation, custom firewalls compliance, and MDM policy integrations.</p>
+                      <p className={`${isDarkMode ? "text-white/50" : "text-slate-500"} text-[11px] leading-relaxed`}>Complete offline VM installation, custom firewalls compliance, and MDM policy integrations.</p>
                     </div>
                     <ul className="space-y-1 text-white/60 text-[10px] list-disc list-inside">
                       <li>On-prem self-hosted proxy backend</li>
@@ -1101,16 +1212,16 @@ export default function App() {
               <div className="space-y-6 max-w-3xl">
                 <div>
                   <h3 className="text-xl font-bold uppercase text-cyan-400 font-mono">ByteBridge Developer Documentation</h3>
-                  <p className="text-xs text-white/50">Learn to feed, pack, and decode transfer chunks procedurally from script terminals.</p>
+                  <p className={`text-xs ${isDarkMode ? "text-white/50" : "text-slate-500"}`}>Learn to feed, pack, and decode transfer chunks procedurally from script terminals.</p>
                 </div>
 
-                <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-4 font-mono text-xs">
+                <div className={`rounded-xl p-5 space-y-4 font-mono text-xs ${isDarkMode ? "bg-white/5 border-white/10 text-slate-300" : "bg-white border-slate-205 text-slate-700 shadow-xs"}`}>
                   <div className="space-y-2">
                     <h4 className="text-sm font-bold text-slate-100 uppercase">&bull; File Packing chunk generation layout</h4>
-                    <p className="text-white/40 text-[11px] leading-relaxed">
+                    <p className={`${isDarkMode ? "text-white/40" : "text-slate-400"} text-[11px] leading-relaxed`}>
                       Each file stream is chunked into logical units byte sizing. To push chunks directly utilizing curl or customized scripts into the ByteBridge proxy channels, POST format schema follows:
                     </p>
-                    <pre className="p-3 bg-black/60 text-emerald-400 text-[10px] rounded border border-white/5 overflow-x-auto leading-relaxed">
+                    <pre className={`p-3 text-[10px] rounded border overflow-x-auto leading-relaxed ${isDarkMode ? "bg-black/60 text-emerald-400 border-white/5" : "bg-slate-50 text-emerald-700 border-slate-200"}`}>
 {`POST /api/bridge/rooms/:code/files/:fileId/chunk
 Content-Type: application/json
 
@@ -1125,10 +1236,10 @@ Content-Type: application/json
 
                   <div className="space-y-2 pt-2 border-t border-white/5">
                     <h4 className="text-sm font-bold text-slate-100 uppercase">&bull; Reconstructing base64 stream locally</h4>
-                    <p className="text-white/40 text-[11px] leading-relaxed">
+                    <p className={`${isDarkMode ? "text-white/40" : "text-slate-400"} text-[11px] leading-relaxed`}>
                       To reconstruct slices in your terminal command lines, copy standard text chunks pack (from Clipboard mode) and output back:
                     </p>
-                    <pre className="p-3 bg-black/60 text-emerald-400 text-[10px] rounded border border-white/5 overflow-x-auto">
+                    <pre className={`p-3 text-[10px] rounded border overflow-x-auto ${isDarkMode ? "bg-black/60 text-emerald-400 border-white/5" : "bg-slate-50 text-emerald-700 border-slate-200"}`}>
 {`# Decode and unpack binary stream package
 echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                     </pre>
@@ -1142,48 +1253,48 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
               <div className="space-y-6 max-w-xl">
                 <div>
                   <h3 className="text-xl font-bold uppercase text-cyan-400 font-mono">Connect support line</h3>
-                  <p className="text-xs text-white/50">Send an authenticated transmission line message to the ByteBridge systems audit team.</p>
+                  <p className={`text-xs ${isDarkMode ? "text-white/50" : "text-slate-500"}`}>Send an authenticated transmission line message to the ByteBridge systems audit team.</p>
                 </div>
 
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    setFeedbackSuccess(true);
+                    setContactSuccess(true);
                   }}
-                  className="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4 font-mono text-xs text-slate-300 animate-fade-in"
+                  className={`rounded-xl p-6 space-y-4 font-mono text-xs animate-fade-in ${isDarkMode ? "bg-white/5 border-white/10 text-slate-300" : "bg-white border-slate-205 text-slate-700 shadow-xs"}`}
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[9px] uppercase text-white/40 mb-1">Your Email</label>
+                      <label className={`block text-[9px] uppercase ${isDarkMode ? "text-white/40" : "text-slate-400"} mb-1`}>Your Email</label>
                       <input
                         type="email"
                         required
                         defaultValue="kumaragurumpk@gmail.com"
-                        className="w-full bg-black/65 border border-white/10 rounded p-2.5 text-white focus:outline-cyan-500"
+                        className={`w-full border rounded p-2.5 focus:outline-cyan-500 ${isDarkMode ? "bg-black/65 border-white/10 text-white focus:bg-black focus:border-white/20" : "bg-white border-slate-350 text-slate-900 focus:bg-white focus:border-cyan-500"}`}
                       />
                     </div>
                     <div>
-                      <label className="block text-[9px] uppercase text-white/40 mb-1">Subject</label>
+                      <label className={`block text-[9px] uppercase ${isDarkMode ? "text-white/40" : "text-slate-400"} mb-1`}>Subject</label>
                       <input
                         type="text"
                         required
                         placeholder="Corporate Firewall Assistance"
-                        className="w-full bg-black/65 border border-white/10 rounded p-2.5 text-white focus:outline-cyan-500"
+                        className={`w-full border rounded p-2.5 focus:outline-cyan-500 ${isDarkMode ? "bg-black/65 border-white/10 text-white focus:bg-black focus:border-white/20" : "bg-white border-slate-350 text-slate-900 focus:bg-white focus:border-cyan-500"}`}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-[9px] uppercase text-white/40 mb-1">Transmission details</label>
+                    <label className={`block text-[9px] uppercase ${isDarkMode ? "text-white/40" : "text-slate-400"} mb-1`}>Transmission details</label>
                     <textarea
                       rows={4}
                       required
                       placeholder="My bank terminal blocks incoming raw WebRTC sockets. Could you assist with offline sequenced QR setup?"
-                      className="w-full bg-black/65 border border-white/10 rounded p-2.5 text-white focus:outline-cyan-500"
+                      className={`w-full border rounded p-2.5 focus:outline-cyan-500 ${isDarkMode ? "bg-black/65 border-white/10 text-white focus:bg-black focus:border-white/20" : "bg-white border-slate-350 text-slate-900 focus:bg-white focus:border-cyan-500"}`}
                     />
                   </div>
 
-                  {feedbackSuccess ? (
+                  {contactSuccess ? (
                     <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-3 rounded font-bold uppercase text-xs">
                       ✔ SUPPORT LINK TRANSMITTED SECURELY. OUR CODE NODES WILL RESPOND WITHIN 3 HOURS.
                     </div>
@@ -1260,7 +1371,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                     <UploadCloud className="w-10 h-10 mx-auto text-cyan-400 animate-bounce" />
                     <div>
                       <span className="text-sm font-bold block uppercase tracking-wider">Drag file here or Click to Browse</span>
-                      <span className="text-xs text-white/40 font-mono block mt-1">Simulated automatic decompression checks apply</span>
+                      <span className={`text-xs ${isDarkMode ? "text-white/40" : "text-slate-400"} font-mono block mt-1`}>Simulated automatic decompression checks apply</span>
                     </div>
                   </div>
 
@@ -1286,11 +1397,11 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                   isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-200"
                 }`}>
                   <div>
-                    <label className="block text-[10px] uppercase text-white/50 font-bold mb-1">Target Platform OS</label>
+                    <label className={`block text-[10px] uppercase ${isDarkMode ? "text-white/50" : "text-slate-500"} font-bold mb-1`}>Target Platform OS</label>
                     <select
                       value={receiverDevice.type}
                       onChange={(e) => setReceiverDevice({ ...receiverDevice, type: e.target.value as DeviceType, name: `${e.target.value.split(" ")[0]}-Remote` })}
-                      className="w-full text-xs font-mono border border-white/10 rounded-lg p-2 bg-black/40 text-slate-300 focus:outline-cyan-500"
+                      className={`w-full text-xs font-mono border rounded-lg p-2 focus:outline-cyan-500 ${isDarkMode ? "border-white/10 bg-black/40 text-slate-300 focus:bg-black focus:border-white/20" : "border-slate-350 bg-white text-slate-900 focus:bg-white focus:border-cyan-500"}`}
                     >
                       <option value="Windows PC">Windows PC</option>
                       <option value="MacBook">MacBook</option>
@@ -1300,10 +1411,10 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase text-white/50 font-bold mb-1">Simulated Destination Folder Path</label>
+                    <label className={`block text-[10px] uppercase ${isDarkMode ? "text-white/50" : "text-slate-500"} font-bold mb-1`}>Simulated Destination Folder Path</label>
                     <input
                       type="text"
-                      className="w-full text-xs font-mono border border-white/10 rounded-lg p-2 bg-black/40 text-emerald-400 focus:outline-cyan-500"
+                      className={`w-full text-xs font-mono border rounded-lg p-2 focus:outline-cyan-500 ${isDarkMode ? "border-white/10 bg-black/40 text-emerald-400 focus:bg-black focus:border-white/20" : "border-slate-350 bg-white text-emerald-700 focus:bg-white focus:border-cyan-500"}`}
                       value={destinationPath}
                       onChange={(e) => setDestinationPath(e.target.value)}
                     />
@@ -1329,7 +1440,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                         ? "bg-cyan-500 border-cyan-500 text-black font-black animate-pulse"
                         : autosystemStage !== "idle" && autosystemStage !== "packing"
                         ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-bold"
-                        : "bg-black/40 border-white/5 text-white/30"
+                        : (isDarkMode ? "bg-black/40 border-white/5 text-white/30" : "bg-slate-100 border-slate-200 text-slate-400")
                     }`}>
                       1. PACKING TAR
                     </div>
@@ -1338,7 +1449,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                         ? "bg-cyan-500 border-cyan-500 text-black font-black animate-pulse"
                         : autosystemStage !== "idle" && autosystemStage !== "packing" && autosystemStage !== "compressing"
                         ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-bold"
-                        : "bg-black/40 border-white/5 text-white/30"
+                        : (isDarkMode ? "bg-black/40 border-white/5 text-white/30" : "bg-slate-100 border-slate-200 text-slate-400")
                     }`}>
                       2. GZIP COMPRESS
                     </div>
@@ -1347,7 +1458,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                         ? "bg-cyan-500 border-cyan-500 text-black font-black animate-pulse"
                         : autosystemStage === "pushing" || autosystemStage === "completed"
                         ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-bold"
-                        : "bg-black/40 border-white/5 text-white/30"
+                        : (isDarkMode ? "bg-black/40 border-white/5 text-white/30" : "bg-slate-100 border-slate-200 text-slate-400")
                     }`}>
                       3. SYMMETRIC ENC
                     </div>
@@ -1356,7 +1467,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                         ? "bg-cyan-500 border-cyan-500 text-black font-black animate-pulse"
                         : autosystemStage === "completed"
                         ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-bold"
-                        : "bg-black/40 border-white/5 text-white/30"
+                        : (isDarkMode ? "bg-black/40 border-white/5 text-white/30" : "bg-slate-100 border-slate-200 text-slate-400")
                     }`}>
                       4. SERVER STREAMING
                     </div>
@@ -1365,10 +1476,10 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                   {/* Progress bar tracking */}
                   {autosystemStage !== "idle" && (
                     <div className="space-y-1 pt-1">
-                      <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden p-0.5 border border-white/5">
+                      <div className={`w-full h-2 rounded-full overflow-hidden p-0.5 border ${isDarkMode ? "bg-black/40 border-white/5" : "bg-slate-200 border-slate-300"}`}>
                         <div className="h-full bg-cyan-400 rounded-full transition-all duration-300" style={{ width: `${transferProgress}%` }}></div>
                       </div>
-                      <div className="flex justify-between text-[9px] font-mono text-white/40">
+                      <div className={`flex justify-between text-[9px] font-mono ${isDarkMode ? "text-white/40" : "text-slate-400"}`}>
                         <span>PIPELINE TOTAL: {transferProgress}%</span>
                         <span>SPEED: {simulatedSpeed} &bull; REMAINING: {simTimeRemaining}</span>
                       </div>
@@ -1443,6 +1554,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                 isSender={true}
                 restrictions={restrictions}
                 onRestrictionsChange={setRestrictions}
+                isDarkMode={isDarkMode}
               />
 
               {/* Selected optimized route generated automatically */}
@@ -1454,6 +1566,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                 fileType={selectedFile?.type || "raw"}
                 restrictions={restrictions}
                 activeProfile={activeProfile}
+                isDarkMode={isDarkMode}
                 onApplyProfile={(profile) => {
                   setActiveProfile(profile);
                   if (profile.method.includes("Restricted") || profile.method.includes("Clipboard")) {
@@ -1467,7 +1580,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
               />
 
               {/* Scannable sequence fallback */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-4">
+              <div className={`rounded-xl p-5 space-y-4 ${isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-205 shadow-xs"}`}>
                 <span className="text-[10px] uppercase tracking-wider text-cyan-400 font-extrabold block">Method 02: Scannable QR Tunnel</span>
                 <div className="flex gap-4 items-center">
                   <div className="bg-white p-2 text-black rounded flex-shrink-0">
@@ -1475,7 +1588,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                   </div>
                   <div>
                     <span className="text-xs font-semibold block">Scan on Target Device</span>
-                    <p className="text-[10px] text-white/50 leading-relaxed mt-0.5">
+                    <p className={`text-[10px] ${isDarkMode ? "text-white/50" : "text-slate-500"} leading-relaxed mt-0.5`}>
                       Open target camera to load pairing instantly. Auto packs and stream starts with zero logins.
                     </p>
                   </div>
@@ -1500,7 +1613,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
               }`}>
                 <div className="space-y-1">
                   <h3 className="text-sm font-extrabold uppercase tracking-widest text-cyan-400 font-mono">2. Enter Session Transfer Code Key</h3>
-                  <p className="text-xs text-white/50">Enter the 6-digit key generated by the sender node browser to initiate immediate secure handshake.</p>
+                  <p className={`text-xs ${isDarkMode ? "text-white/50" : "text-slate-500"}`}>Enter the 6-digit key generated by the sender node browser to initiate immediate secure handshake.</p>
                 </div>
 
                 <div className="flex gap-3">
@@ -1510,7 +1623,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                     value={receiverCodeInput}
                     onChange={(e) => setReceiverCodeInput(e.target.value.replace(/\D/g, ""))}
                     placeholder="e.g. 582914"
-                    className="flex-1 bg-black/60 border border-white/15 p-3.5 rounded-lg text-emerald-400 font-mono font-black text-center tracking-widest text-xl focus:outline-cyan-500 focus:bg-black transition-colors"
+                    className={`flex-1 p-3.5 rounded-lg font-mono font-black text-center tracking-widest text-xl focus:outline-cyan-500 transition-colors ${isDarkMode ? "bg-black/60 border-white/15 text-emerald-400 focus:bg-black focus:border-white/20" : "bg-white border-slate-350 text-emerald-700 focus:bg-white focus:border-cyan-500 shadow-inner"}`}
                   />
                   <button
                     onClick={lookupTransferCode}
@@ -1544,9 +1657,9 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                     <span className="font-extrabold text-slate-300 block uppercase font-mono">4. Select Location and Path & Save:</span>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-[9px] uppercase text-white/50 mb-1">Download Destination Option</label>
+                        <label className={`block text-[9px] uppercase ${isDarkMode ? "text-white/50" : "text-slate-500"} mb-1`}>Download Destination Option</label>
                         <select
-                          className="w-full text-xs font-mono bg-black/60 border border-white/10 text-slate-300 rounded-lg p-2 focus:outline-cyan-500"
+                          className={`w-full text-xs font-mono border rounded-lg p-2 focus:outline-cyan-500 ${isDarkMode ? "bg-black/60 border-white/10 text-slate-300 focus:bg-black focus:border-white/20" : "bg-white border-slate-350 text-slate-800 focus:bg-white focus:border-cyan-500 shadow-inner"}`}
                           value={destinationPath}
                           onChange={(e) => setDestinationPath(e.target.value)}
                         >
@@ -1556,7 +1669,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                         </select>
                       </div>
                       <div>
-                        <label className="block text-[9px] uppercase text-white/50 mb-1">State Integrity Check</label>
+                        <label className={`block text-[9px] uppercase ${isDarkMode ? "text-white/50" : "text-slate-500"} mb-1`}>State Integrity Check</label>
                         <span className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-2 rounded-lg text-xs leading-none font-mono font-bold block text-center uppercase">
                           No Bit Collisions Detected &bull; PASS
                         </span>
@@ -1565,7 +1678,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                   </div>
 
                   {/* Receive automatic pipeline backstage indicators */}
-                  <div className="bg-black/60 rounded-xl p-4 border border-white/5 space-y-3.5">
+                  <div className={`rounded-xl p-4 border space-y-3.5 ${isDarkMode ? "bg-black/60 border-white/5" : "bg-slate-50 border-slate-200 shadow-sm"}`}>
                     <div className="flex justify-between items-center text-xs font-mono">
                       <span className="text-slate-400">UNPACK STREAMING CORES:</span>
                       <span className="text-cyan-400 uppercase font-bold text-[10px]">
@@ -1579,7 +1692,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                           ? "bg-cyan-500 border-cyan-500 text-black font-black animate-pulse"
                           : autoreceiveStage !== "idle" && autoreceiveStage !== "pulling"
                           ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-bold"
-                          : "bg-black/40 border-white/5 text-white/30"
+                          : (isDarkMode ? "bg-black/40 border-white/5 text-white/30" : "bg-slate-100 border-slate-200 text-slate-400")
                       }`}>
                         1. PULL CHUNKS
                       </div>
@@ -1588,7 +1701,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                           ? "bg-cyan-500 border-cyan-500 text-black font-black animate-pulse"
                           : autoreceiveStage !== "idle" && autoreceiveStage !== "pulling" && autoreceiveStage !== "decrypting"
                           ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-bold"
-                          : "bg-black/40 border-white/5 text-white/30"
+                          : (isDarkMode ? "bg-black/40 border-white/5 text-white/30" : "bg-slate-100 border-slate-200 text-slate-400")
                       }`}>
                         2. AES DECRYPT
                       </div>
@@ -1597,7 +1710,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                           ? "bg-cyan-500 border-cyan-500 text-black font-black animate-pulse"
                           : autoreceiveStage === "integrity-check" || autoreceiveStage === "completed"
                           ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-bold"
-                          : "bg-black/40 border-white/5 text-white/30"
+                          : (isDarkMode ? "bg-black/40 border-white/5 text-white/30" : "bg-slate-100 border-slate-200 text-slate-400")
                       }`}>
                         3. TAR UNPACK
                       </div>
@@ -1606,7 +1719,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                           ? "bg-cyan-500 border-cyan-500 text-black font-black animate-pulse"
                           : autoreceiveStage === "completed"
                           ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-bold"
-                          : "bg-black/40 border-white/5 text-white/30"
+                          : (isDarkMode ? "bg-black/40 border-white/5 text-white/30" : "bg-slate-100 border-slate-200 text-slate-400")
                       }`}>
                         4. INTEGRITY PASS
                       </div>
@@ -1614,10 +1727,10 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
 
                     {autoreceiveStage !== "idle" && (
                       <div className="space-y-1">
-                        <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden p-0.5 border border-white/5">
+                        <div className={`w-full h-2 rounded-full overflow-hidden p-0.5 border ${isDarkMode ? "bg-black/40 border-white/5" : "bg-slate-200 border-slate-300"}`}>
                           <div className="h-full bg-cyan-400 rounded-full transition-all duration-300" style={{ width: `${transferProgress}%` }}></div>
                         </div>
-                        <div className="flex justify-between text-[9px] font-mono text-white/40">
+                        <div className={`flex justify-between text-[9px] font-mono ${isDarkMode ? "text-white/40" : "text-slate-400"}`}>
                           <span>DOWNLOAD STREAM PROGRESS: {transferProgress}%</span>
                           <span>SPEED: {simulatedSpeed} &bull; COMPILING...</span>
                         </div>
@@ -1647,9 +1760,9 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
 
               {/* Interactive Help instructions box if search isn't done */}
               {!searchedFileDetails && (
-                <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-3 font-mono text-xs">
+                <div className={`rounded-xl p-5 space-y-3 font-mono text-xs ${isDarkMode ? "bg-white/5 border-white/10 text-slate-300" : "bg-white border-slate-205 text-slate-700 shadow-xs"}`}>
                   <span className="text-cyan-400 font-bold uppercase tracking-wider text-[10px] block mb-1">Awaiting Key Resolve Handshake</span>
-                  <p className="text-white/40 leading-relaxed text-[11px]">
+                  <p className={`${isDarkMode ? "text-white/40" : "text-slate-400"} leading-relaxed text-[11px]`}>
                     To simulated receipt, open ByteBridge sender tab or click "Overview" to see the active 6-digit server bridge code. Once resolved, the system performs cryptographic integrity validation, and restores file binary buffers with zero technical user effort.
                   </p>
                 </div>
@@ -1668,22 +1781,23 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                 isSender={false}
                 restrictions=""
                 onRestrictionsChange={() => {}}
+                isDarkMode={isDarkMode}
               />
 
               {/* Dynamic status indicators representation */}
-              <div className="bg-white/5 border border-white/10 p-5 rounded-xl space-y-4">
+              <div className={`p-5 rounded-xl space-y-4 ${isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-205 shadow-xs"}`}>
                 <span className="text-xs uppercase font-extrabold text-cyan-400 block font-mono">Synchronized Peer Array</span>
 
                 <div className="space-y-2.5">
-                  <div className="flex justify-between items-center bg-black/40 p-3 rounded-lg border border-white/5 text-xs font-mono">
+                  <div className={`flex justify-between items-center p-3 rounded-lg border text-xs font-mono ${isDarkMode ? "bg-black/40 border-white/5 text-slate-350" : "bg-slate-50 border-slate-200 text-slate-700"}`}>
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                       <span>Windows PC Node-Host</span>
                     </div>
-                    <span className="text-white/40 text-[10px]">192.168.1.18</span>
+                    <span className={`${isDarkMode ? "text-white/40" : "text-slate-400"} text-[10px]`}>192.168.1.18</span>
                   </div>
 
-                  <div className="flex justify-between items-center bg-black/40 p-3 rounded-lg border border-white/5 text-xs font-mono">
+                  <div className={`flex justify-between items-center p-3 rounded-lg border text-xs font-mono ${isDarkMode ? "bg-black/40 border-white/5 text-slate-350" : "bg-slate-50 border-slate-200 text-slate-700"}`}>
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                       <span className="text-emerald-400">Active Handshake Relay</span>
@@ -1704,11 +1818,11 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
             <div className="flex justify-between items-end pb-3 border-b border-white/15">
               <div>
                 <h3 className="text-lg font-black uppercase text-cyan-400 font-mono">Transmission History Records</h3>
-                <p className="text-xs text-white/50">Historic archive of automated multi-part uploads, downloads, and packing checks.</p>
+                <p className={`text-xs ${isDarkMode ? "text-white/50" : "text-slate-500"}`}>Historic archive of automated multi-part uploads, downloads, and packing checks.</p>
               </div>
               <button
                 onClick={() => setHistoryLogs([])}
-                className="text-[10px] uppercase font-black tracking-widest text-rose-400 hover:text-rose-300"
+                className={`text-[10px] uppercase font-black tracking-widest ${isDarkMode ? "text-rose-400 hover:text-rose-300" : "text-rose-600 hover:text-rose-700"}`}
               >
                 Flush Logs
               </button>
@@ -1736,7 +1850,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                   <tbody className="divide-y divide-white/5">
                     {historyLogs.map((log) => (
                       <tr key={log.id} className="hover:bg-white/5">
-                        <td className="p-4 text-white/40">{log.id}</td>
+                        <td className={`p-4 ${isDarkMode ? "text-white/40" : "text-slate-400"}`}>{log.id}</td>
                         <td className="p-4 font-bold text-slate-200">{log.name}</td>
                         <td className="p-4 text-slate-300">{log.sizeFormatted}</td>
                         <td className="p-4">
@@ -1752,7 +1866,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                           </span>
                         </td>
                         <td className="p-4 font-bold text-white">{log.code}</td>
-                        <td className="p-4 text-white/40">{log.timestamp}</td>
+                        <td className={`p-4 ${isDarkMode ? "text-white/40" : "text-slate-400"}`}>{log.timestamp}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -1767,23 +1881,23 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
           <div className="space-y-6 animate-fade-in" id="settings-view-tab">
             <div className="pb-3 border-b border-white/10">
               <h3 className="text-lg font-black uppercase text-cyan-400 font-mono">ByteBridge Node Configurations</h3>
-              <p className="text-xs text-white/50">Tune automated packing buffers, keys standard, and custom connection proxies.</p>
+              <p className={`text-xs ${isDarkMode ? "text-white/50" : "text-slate-500"}`}>Tune automated packing buffers, keys standard, and custom connection proxies.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
 
               {/* Cryptography panel */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-4">
+              <div className={`rounded-xl p-5 space-y-4 ${isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-205 shadow-xs"}`}>
                 <span className="text-cyan-400 font-black uppercase text-[10px] tracking-wider block">Compression & Encryption tuning</span>
 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-white/50 text-[10px] uppercase font-bold mb-1">Compression Algorithem</label>
+                    <label className={`block ${isDarkMode ? "text-white/50" : "text-slate-500"} text-[10px] uppercase font-bold mb-1`}>Compression Algorithem</label>
                     <div className="grid grid-cols-3 gap-2">
                       <button
                         onClick={() => setCompressionMode("lzma")}
                         className={`p-2 rounded border uppercase font-extrabold text-[10px] ${
-                          compressionMode === "lzma" ? "bg-cyan-500 text-black border-cyan-500" : "bg-black/40 border-white/5 text-slate-400 hover:bg-black"
+                          compressionMode === "lzma" ? "bg-cyan-500 text-black border-cyan-500" : (isDarkMode ? "bg-black/40 border-white/5 text-slate-400 hover:bg-black" : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200")
                         }`}
                       >
                         LZMA Level 3
@@ -1791,7 +1905,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                       <button
                         onClick={() => setCompressionMode("gzip")}
                         className={`p-2 rounded border uppercase font-extrabold text-[10px] ${
-                          compressionMode === "gzip" ? "bg-cyan-500 text-black border-cyan-500" : "bg-black/40 border-white/5 text-slate-400 hover:bg-black"
+                          compressionMode === "gzip" ? "bg-cyan-500 text-black border-cyan-500" : (isDarkMode ? "bg-black/40 border-white/5 text-slate-400 hover:bg-black" : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200")
                         }`}
                       >
                         GZIP Fast
@@ -1799,7 +1913,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                       <button
                         onClick={() => setCompressionMode("none")}
                         className={`p-2 rounded border uppercase font-extrabold text-[10px] ${
-                          compressionMode === "none" ? "bg-cyan-500 text-black border-cyan-500" : "bg-black/40 border-white/5 text-slate-400 hover:bg-black"
+                          compressionMode === "none" ? "bg-cyan-500 text-black border-cyan-500" : (isDarkMode ? "bg-black/40 border-white/5 text-slate-400 hover:bg-black" : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200")
                         }`}
                       >
                         None
@@ -1808,12 +1922,12 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                   </div>
 
                   <div>
-                    <label className="block text-white/50 text-[10px] uppercase font-bold mb-1">AES Key Depth</label>
+                    <label className={`block ${isDarkMode ? "text-white/50" : "text-slate-500"} text-[10px] uppercase font-bold mb-1`}>AES Key Depth</label>
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         onClick={() => setEncryptionStandard("aes-256")}
                         className={`p-2 rounded border uppercase font-extrabold text-[10px] ${
-                          encryptionStandard === "aes-256" ? "bg-cyan-500 text-black border-cyan-500" : "bg-black/40 border-white/5 text-slate-400 hover:bg-black"
+                          encryptionStandard === "aes-256" ? "bg-cyan-500 text-black border-cyan-500" : (isDarkMode ? "bg-black/40 border-white/5 text-slate-400 hover:bg-black" : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200")
                         }`}
                       >
                         AES 256 GCM (Strict)
@@ -1821,7 +1935,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                       <button
                         onClick={() => setEncryptionStandard("aes-128")}
                         className={`p-2 rounded border uppercase font-extrabold text-[10px] ${
-                          encryptionStandard === "aes-128" ? "bg-cyan-500 text-black border-cyan-500" : "bg-black/40 border-white/5 text-slate-400 hover:bg-black"
+                          encryptionStandard === "aes-128" ? "bg-cyan-500 text-black border-cyan-500" : (isDarkMode ? "bg-black/40 border-white/5 text-slate-400 hover:bg-black" : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200")
                         }`}
                       >
                         AES 128 CBC (Fast)
@@ -1832,25 +1946,25 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
               </div>
 
               {/* Storage security limitations */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-4">
+              <div className={`rounded-xl p-5 space-y-4 ${isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-205 shadow-xs"}`}>
                 <span className="text-cyan-400 font-black uppercase text-[10px] tracking-wider block">Network Proxies and Limits</span>
 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-white/50 text-[10px] uppercase font-bold mb-1 col-span-2">Temporary Session TTL (Minutes)</label>
+                    <label className={`block ${isDarkMode ? "text-white/50" : "text-slate-500"} text-[10px] uppercase font-bold mb-1 col-span-2`}>Temporary Session TTL (Minutes)</label>
                     <input
                       type="number"
-                      className="w-full bg-black/40 border border-white/10 p-2 text-emerald-400 rounded-lg text-xs"
+                      className={`w-full border p-2 rounded-lg text-xs ${isDarkMode ? "bg-black/40 border-white/10 text-emerald-400" : "bg-slate-50 border-slate-200 text-emerald-700"}`}
                       value={sessionExpiryMinutes}
                       onChange={(e) => setSessionExpiryMinutes(Number(e.target.value))}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-white/50 text-[10px] uppercase font-bold mb-1 col-span-2 font-mono">Custom stun/turn STUN-WEBRTC fallback ports</label>
+                    <label className={`block ${isDarkMode ? "text-white/50" : "text-slate-500"} text-[10px] uppercase font-bold mb-1 col-span-2 font-mono`}>Custom stun/turn STUN-WEBRTC fallback ports</label>
                     <input
                       type="text"
-                      className="w-full bg-black/40 border border-white/10 p-2 text-emerald-400 rounded-lg text-xs font-mono"
+                      className={`w-full border p-2 rounded-lg text-xs font-mono ${isDarkMode ? "bg-black/40 border-white/10 text-emerald-400" : "bg-slate-50 border-slate-200 text-emerald-700"}`}
                       value={customWebRTCPorts}
                       onChange={(e) => setCustomWebRTCPorts(e.target.value)}
                     />
@@ -1877,7 +1991,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
           <div className="space-y-6 animate-fade-in" id="help-view-tab">
             <div className="pb-3 border-b border-white/10">
               <h3 className="text-lg font-black uppercase text-cyan-400 font-mono">ByteBridge Help Center & Corporate Bypass FAQ</h3>
-              <p className="text-xs text-white/50">Learn about our automatic pipeline design and environment restriction hacks.</p>
+              <p className={`text-xs ${isDarkMode ? "text-white/50" : "text-slate-500"}`}>Learn about our automatic pipeline design and environment restriction hacks.</p>
             </div>
 
             <div className="space-y-4 max-w-3xl">
@@ -1896,9 +2010,9 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
         )}
 
         {/* Dynamic bottom strip listing all ten supported device transfer methods */}
-        <section className="mt-12 border-t border-white/10 pt-8" id="grid-methods-strip">
+        <section className={`mt-12 border-t pt-8 ${isDarkMode ? "border-white/10" : "border-slate-200"}`} id="grid-methods-strip">
           <div className="mb-4 flex items-center justify-between">
-            <span className="text-xs uppercase tracking-widest text-white/30 font-bold">10 Dynamic Bridge Transfer Methods Supported</span>
+            <span className={`text-xs uppercase tracking-widest font-bold ${isDarkMode ? "text-white/30" : "text-slate-400"}`}>10 Dynamic Bridge Transfer Methods Supported</span>
             <span className="text-[10px] font-mono text-cyan-500">SEAMLESS MULTI-PATH SYSTEM</span>
           </div>
 
@@ -1943,7 +2057,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                   className={`cursor-pointer p-2.5 rounded border text-center transition-all flex flex-col justify-between min-h-[90px] ${
                     ixActive
                       ? "bg-cyan-500 border-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.3)]"
-                      : "bg-white/5 border-white/10 hover:border-white/20 text-white/80"
+                      : (isDarkMode ? "bg-white/5 border-white/10 hover:border-white/20 text-white/80" : "bg-white border-slate-205 hover:border-cyan-500/35 text-slate-800 shadow-xs")
                   }`}
                 >
                   <div className="font-mono text-xs font-black tracking-widest leading-none mb-1 text-left select-none">
@@ -1952,7 +2066,7 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
                   <div className="text-[10px] font-black uppercase text-left leading-tight tracking-wider truncate mb-1">
                     {m.name}
                   </div>
-                  <div className={`text-[8px] text-left leading-normal font-sans select-none truncate ${ixActive ? "text-black/80" : "text-white/40"}`}>
+                  <div className={`text-[8px] text-left leading-normal font-sans select-none truncate ${ixActive ? "text-black/80" : (isDarkMode ? "text-white/40" : "text-slate-500")}`}>
                     {m.detail}
                   </div>
                 </div>
@@ -1962,12 +2076,24 @@ echo "SGVsbG8gQnl0ZUJyaWRnZQ==" | base64 --decode > output_recovered.pdf`}
         </section>
 
         {/* Brand System Footer */}
-        <footer className="mt-8 text-center text-[10px] text-white/30 font-mono flex flex-col sm:flex-row justify-between items-center gap-4 py-4 border-t border-white/5">
+        <footer className={`mt-8 text-center text-[10px] font-mono flex flex-col sm:flex-row justify-between items-center gap-4 py-4 border-t ${
+          isDarkMode ? "text-white/30 border-white/5" : "text-slate-400 border-slate-200"
+        }`}>
           <span>&copy; 2026 BYTEBRIDGE SYSTEMS INCORPORATED. POWERED BY INTEGRITY PACK AI.</span>
-          <span className="flex items-center gap-1.5 uppercase hover:text-white transition">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-            ACTIVE NETWORK NODE ENCRYPT LINK SECURED
-          </span>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://www.buymeacoffee.com/kumragurumpk2"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 hover:bg-yellow-400/20 transition text-[9px] font-bold uppercase tracking-widest"
+            >
+              ☕ Support
+            </a>
+            <span className={`flex items-center gap-1.5 uppercase transition ${isDarkMode ? "hover:text-white" : "hover:text-slate-900"}`}>
+              <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+              ACTIVE NETWORK NODE ENCRYPT LINK SECURED
+            </span>
+          </div>
         </footer>
 
       </div>

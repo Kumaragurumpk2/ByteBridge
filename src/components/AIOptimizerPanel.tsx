@@ -22,6 +22,7 @@ interface AIOptimizerPanelProps {
   restrictions: string;
   onApplyProfile: (profile: OptimizationProfile) => void;
   activeProfile: OptimizationProfile | null;
+  isDarkMode: boolean;
 }
 
 export const AIOptimizerPanel: React.FC<AIOptimizerPanelProps> = ({
@@ -33,6 +34,7 @@ export const AIOptimizerPanel: React.FC<AIOptimizerPanelProps> = ({
   restrictions,
   onApplyProfile,
   activeProfile,
+  isDarkMode,
 }) => {
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<OptimizationProfile | null>(activeProfile);
@@ -111,7 +113,11 @@ export const AIOptimizerPanel: React.FC<AIOptimizerPanelProps> = ({
   };
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-4 flex flex-col h-full font-mono text-xs text-slate-300" id="ai-optimizer-panel">
+    <div className={`rounded-xl p-5 space-y-4 flex flex-col h-full font-mono text-xs ${
+      isDarkMode 
+        ? "bg-white/5 border border-white/10 text-slate-300" 
+        : "bg-white border border-slate-200 text-slate-700 shadow-xs"
+    }`} id="ai-optimizer-panel">
       {/* Title block */}
       <div className="flex justify-between items-start">
         <div className="flex gap-2">
@@ -119,16 +125,18 @@ export const AIOptimizerPanel: React.FC<AIOptimizerPanelProps> = ({
             <Brain className="w-5 h-5 animate-pulse" />
           </div>
           <div>
-            <h3 className="font-extrabold text-[12px] uppercase tracking-wider text-slate-200 flex items-center gap-1.5ClassName">
+            <h3 className={`font-extrabold text-[12px] uppercase tracking-wider flex items-center gap-1.5 ${
+              isDarkMode ? "text-slate-200" : "text-slate-900"
+            }`}>
               AI Routing Optimizer <Sparkles className="w-3.5 h-3.5 text-amber-400 fill-amber-300 animate-bounce" />
             </h3>
-            <p className="text-[10px] text-white/40">Autonomous path config constructor</p>
+            <p className={`text-[10px] ${isDarkMode ? "text-white/40" : "text-slate-400"}`}>Autonomous path config constructor</p>
           </div>
         </div>
         <button
           onClick={runAIOptimization}
           disabled={loading}
-          className="flex items-center gap-1.5 bg-cyan-500 hover:bg-cyan-400 disabled:opacity-50 text-black font-extrabold text-[10px] uppercase tracking-widest px-3 py-1.5 rounded transition active:scale-95"
+          className="flex items-center gap-1.5 bg-cyan-500 hover:bg-cyan-400 disabled:opacity-50 text-black font-extrabold text-[10px] uppercase tracking-widest px-3 py-1.5 rounded transition active:scale-95 cursor-pointer"
         >
           {loading ? (
             <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -140,18 +148,22 @@ export const AIOptimizerPanel: React.FC<AIOptimizerPanelProps> = ({
       </div>
 
       {/* active details preview */}
-      <div className="bg-black/40 rounded-lg p-3 text-[10px] text-slate-400 space-y-1.5 border border-white/5">
+      <div className={`rounded-lg p-3 text-[10px] space-y-1.5 border ${
+        isDarkMode 
+          ? "bg-black/40 border-white/5 text-slate-400" 
+          : "bg-slate-50 border-slate-200 text-slate-650"
+      }`}>
         <div className="flex justify-between">
-          <span className="text-white/40">In-Transit Element:</span>
-          <span className="font-bold text-slate-300 truncate max-w-[150px]">{fileName} ({fileSize})</span>
+          <span className={isDarkMode ? "text-white/40" : "text-slate-400"}>In-Transit Element:</span>
+          <span className={`font-bold truncate max-w-[150px] ${isDarkMode ? "text-slate-300" : "text-slate-800"}`}>{fileName} ({fileSize})</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-white/40">Encryption Stream:</span>
-          <span className="font-bold text-emerald-400">ACTIVE CLIENT-SIDE</span>
+          <span className={isDarkMode ? "text-white/40" : "text-slate-400"}>Encryption Stream:</span>
+          <span className="font-bold text-emerald-500">ACTIVE CLIENT-SIDE</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-white/40">Direct Endpoint:</span>
-          <span className="font-bold text-cyan-400 flex items-center gap-1">
+          <span className={isDarkMode ? "text-white/40" : "text-slate-400"}>Direct Endpoint:</span>
+          <span className="font-bold text-cyan-500 flex items-center gap-1">
             {senderDevice.type.split(" ")[0]} <ArrowRight className="w-2.5 h-2.5" /> {receiverDevice.type.split(" ")[0]}
           </span>
         </div>
@@ -160,14 +172,16 @@ export const AIOptimizerPanel: React.FC<AIOptimizerPanelProps> = ({
       {/* Inner Screen */}
       <div className="flex-1 flex flex-col justify-center relative min-h-[170px]">
         {loading ? (
-          <div className="absolute inset-0 bg-black/90 rounded-lg flex flex-col items-center justify-center p-4 text-center z-10 space-y-3">
+          <div className={`absolute inset-0 rounded-lg flex flex-col items-center justify-center p-4 text-center z-10 space-y-3 ${
+            isDarkMode ? "bg-black/90" : "bg-white/95"
+          }`}>
             <div className="relative">
               <div className="w-10 h-10 rounded-full border-2 border-cyan-500/10 border-t-cyan-500 animate-spin"></div>
               <Cpu className="w-4 h-4 text-cyan-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
             </div>
             <div className="space-y-1 max-w-[240px]">
-              <span className="text-[10px] font-bold text-slate-200 animate-pulse block uppercase tracking-wider">Dynamic Re-routing Core</span>
-              <span className="text-[9px] text-white/40 leading-relaxed block h-8">{loadingText}</span>
+              <span className={`text-[10px] font-bold animate-pulse block uppercase tracking-wider ${isDarkMode ? "text-slate-200" : "text-slate-850"}`}>Dynamic Re-routing Core</span>
+              <span className={`text-[9px] leading-relaxed block h-8 ${isDarkMode ? "text-white/40" : "text-slate-500"}`}>{loadingText}</span>
             </div>
           </div>
         ) : null}
@@ -176,56 +190,62 @@ export const AIOptimizerPanel: React.FC<AIOptimizerPanelProps> = ({
           <div className="space-y-3.5">
             {/* Quick Badges Grid */}
             <div className="grid grid-cols-2 gap-2.5 text-[10px]">
-              <div className="bg-white/5 rounded p-2 border border-white/5">
-                <span className="block text-[8px] text-white/40 uppercase tracking-wider">Target method</span>
-                <span className="block font-bold text-slate-200 truncate mt-0.5" title={profile.method}>
+              <div className={`rounded p-2 border ${isDarkMode ? "bg-white/5 border-white/5" : "bg-slate-50 border-slate-200"}`}>
+                <span className={`block text-[8px] uppercase tracking-wider ${isDarkMode ? "text-white/40" : "text-slate-400"}`}>Target method</span>
+                <span className={`block font-bold truncate mt-0.5 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`} title={profile.method}>
                   {profile.method.split(":")[1]?.trim() || profile.method}
                 </span>
                 <span className="text-[8px] text-cyan-400 mt-0.5 block font-extrabold">{profile.method.split(":")[0]}</span>
               </div>
 
-              <div className="bg-white/5 rounded p-2 border border-white/5">
-                <span className="block text-[8px] text-white/40 uppercase tracking-wider">Chunk size profile</span>
-                <span className="block font-bold text-slate-200 mt-0.5 flex items-center gap-1">
+              <div className={`rounded p-2 border ${isDarkMode ? "bg-white/5 border-white/5" : "bg-slate-50 border-slate-200"}`}>
+                <span className={`block text-[8px] uppercase tracking-wider ${isDarkMode ? "text-white/40" : "text-slate-400"}`}>Chunk size profile</span>
+                <span className={`block font-bold mt-0.5 flex items-center gap-1 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}>
                   <Layers className="w-3 h-3 text-cyan-400" /> {profile.chunkSize}
                 </span>
               </div>
 
-              <div className="bg-white/5 rounded p-2 border border-white/5">
-                <span className="block text-[8px] text-white/40 uppercase tracking-wider">Auto Compress</span>
-                <span className="block font-bold text-slate-200 mt-0.5 flex items-center gap-1">
+              <div className={`rounded p-2 border ${isDarkMode ? "bg-white/5 border-white/5" : "bg-slate-50 border-slate-200"}`}>
+                <span className={`block text-[8px] uppercase tracking-wider ${isDarkMode ? "text-white/40" : "text-slate-400"}`}>Auto Compress</span>
+                <span className={`block font-bold mt-0.5 flex items-center gap-1 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}>
                   <Gauge className="w-3 h-3 text-cyan-400" /> {profile.compression}
                 </span>
               </div>
 
-              <div className="bg-white/5 rounded p-2 border border-white/5">
-                <span className="block text-[8px] text-white/40 uppercase tracking-wider">AES Protection</span>
-                <span className="block font-bold text-slate-200 mt-0.5 flex items-center gap-1">
+              <div className={`rounded p-2 border ${isDarkMode ? "bg-white/5 border-white/5" : "bg-slate-50 border-slate-200"}`}>
+                <span className={`block text-[8px] uppercase tracking-wider ${isDarkMode ? "text-white/40" : "text-slate-400"}`}>AES Protection</span>
+                <span className={`block font-bold mt-0.5 flex items-center gap-1 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}>
                   <ShieldCheck className="w-3 h-3 text-cyan-400" /> {profile.encryption}
                 </span>
               </div>
             </div>
 
             {/* Path Routing Text */}
-            <div className="bg-black/40 border border-white/5 rounded-lg p-3">
-              <span className="block text-[8px] text-white/40 font-bold mb-1 tracking-widest uppercase flex items-center gap-1">
+            <div className={`border rounded-lg p-3 ${isDarkMode ? "bg-black/40 border-white/5" : "bg-slate-50 border-slate-200"}`}>
+              <span className={`block text-[8px] font-bold mb-1 tracking-widest uppercase flex items-center gap-1 ${
+                isDarkMode ? "text-white/40" : "text-slate-400"
+              }`}>
                 <Info className="w-3.5 h-3.5 text-cyan-400" /> Dynamic Transfer Proxy Line:
               </span>
-              <p className="text-[9.5px] text-emerald-400 italic leading-normal">
+              <p className="text-[9.5px] text-emerald-500 italic leading-normal font-bold">
                 {profile.route}
               </p>
             </div>
 
             {/* Rationale explanation text block */}
-            <div className="text-[10px] text-slate-400 border-l-2 border-cyan-400 pl-2.5 py-1 leading-relaxed italic">
+            <div className={`text-[10px] border-l-2 border-cyan-400 pl-2.5 py-1 leading-relaxed italic ${
+              isDarkMode ? "text-slate-400" : "text-slate-650"
+            }`}>
               <strong>Gemini Optimizer Advice:</strong> {profile.explanation}
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center p-6 text-center border-2 border-dashed border-white/5 rounded-xl bg-black/20">
+          <div className={`flex flex-col items-center justify-center p-6 text-center border-2 border-dashed rounded-xl ${
+            isDarkMode ? "border-white/5 bg-black/20" : "border-slate-300 bg-slate-50"
+          }`}>
             <Brain className="w-8 h-8 text-slate-600 mb-2 animate-bounce" />
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Route Not Yet Optimized</span>
-            <p className="text-[9px] text-white/30 max-w-[200px] mt-1 leading-relaxed">
+            <span className={`text-[10px] font-bold uppercase tracking-wide ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}>Route Not Yet Optimized</span>
+            <p className={`text-[9px] max-w-[200px] mt-1 leading-relaxed ${isDarkMode ? "text-white/30" : "text-slate-500"}`}>
               Click RE-OPT above. Gemini models will construct target packet channels.
             </p>
           </div>
