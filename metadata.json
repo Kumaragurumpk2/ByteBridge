@@ -1,0 +1,1 @@
+{"name":"ByteBridge","description":"Universal Device Bridge to transfer files and sync clipboard between any devices. Includes 6-digit codes, WebRTC simulation, chunked clipboard packaging for restricted environments, and AI-powered route optimization.","requestFramePermissions":[],"majorCapabilities":["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]}

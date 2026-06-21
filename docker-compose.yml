@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  bytebridge-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - DATABASE_URL=postgresql://bytebridge_user:secure_bridge_pass@db:5412/bytebridge_db?schema=public
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: postgres:15-alpine
+    container_name: bytebridge-postgres
+    ports:
+      - "5412:5432"
+    environment:
+      - POSTGRES_USER=bytebridge_user
+      - POSTGRES_PASSWORD=secure_bridge_pass
+      - POSTGRES_DB=bytebridge_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:

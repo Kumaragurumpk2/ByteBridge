@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Room {
+  id             String         @id @default(uuid())
+  code           String         @unique // 6-digit dynamic pairing code
+  clipboardShare String         @default("")
+  lastActivity   DateTime       @default(now()) @updatedAt
+  createdAt     DateTime       @default(now())
+  devices        Device[]
+  files          RoomFile[]
+
+  @@index([code])
+}
+
+model Device {
+  id             String   @id @default(uuid())
+  deviceId       String   @unique // MAC or client-generated unique UUID
+  name           String
+  type           String   // e.g. "MacBook", "Android Phone", "iPhone"
+  batteryLevel   Int      @default(100)
+  networkQuality String   @default("Excellent WiFi")
+  isOnline       Boolean  @default(true)
+  lastSeen       DateTime @default(now())
+  
+  room           Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId         String
+
+  @@index([deviceId])
+}
+
+model RoomFile {
+  id           String       @id @default(uuid())
+  fileId       String       @unique // e.g. "f-idx-123456"
+  name         String
+  size         Int
+  type         String
+  totalChunks  Int          @default(1)
+  status       String       @default("transferring") // transferring | completed | failed
+  senderId     String
+  receiverId   String?
+  speed        String       @default("0 KB/s")
+  timeRemaining String      @default("Estimating...")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now()) @updatedAt
+
+  room         Room         @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId       String
+  chunks       FileChunk[]
+
+  @@index([fileId])
+}
+
+model FileChunk {
+  id           String   @id @default(uuid())
+  chunkIndex   Int
+  payload      SafeText @relation(fields: [payloadId], references: [id], onDelete: Cascade)
+  payloadId    String
+  createdAt    DateTime @default(now())
+  
+  file         RoomFile @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  fileId       String
+
+  @@unique([fileId, chunkIndex])
+}
+
+model SafeText {
+  id        String      @id @default(uuid())
+  data      String      @db.Text // Contains AES-256 encrypted base64 payload
+  chunks    FileChunk[]
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  event     String   // e.g. "ROOM_CREATED", "FILE_PACKED", "CHUNK_RESTORED"
+  details   String?
+  timestamp DateTime @default(now())
+}
