@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div align="center">
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 
@@ -193,3 +194,6 @@ npx prisma db push
 
 ## 📄 License
 This project is private and proprietary. All rights reserved.
+=======
+
+>>>>>>> 10b7ae2ae327e82771ba5274e4645aa27e44ce7f
